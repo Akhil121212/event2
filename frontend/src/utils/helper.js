@@ -3,5 +3,6 @@ export const getImageUrl = (imagePath) => {
     if (imagePath.startsWith('http')) return imagePath;
     // Assuming backend is on localhost:5000
     // In production, this should be an environment variable
-    return `http://localhost:5000${imagePath}`;
+    const baseUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+    return `${baseUrl}${imagePath}`;
 };
