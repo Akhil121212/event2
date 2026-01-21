@@ -20,7 +20,7 @@ const Navbar = () => {
         <nav className="fixed top-0 left-0 w-full z-50 glass px-6 py-4">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <Link to="/" className="text-2xl font-bold font-['Outfit'] tracking-wider">
-                    EVENT<span className="text-primary">OS</span>
+                    Event<span className="text-primary">Go</span>
                 </Link>
 
                 {/* Desktop Menu */}

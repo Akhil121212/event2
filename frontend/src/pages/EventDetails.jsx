@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
+import { getImageUrl } from '../utils/helper';
 import { Calendar, MapPin, Clock } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -68,7 +69,7 @@ const EventDetails = () => {
         <div className="pt-20 min-h-screen">
             {/* Hero Image */}
             <div className="h-[50vh] relative">
-                <img src={event.image || 'https://images.unsplash.com/photo-1504384308090-c54be3855833'} className="w-full h-full object-cover" alt={event.title} />
+                <img src={getImageUrl(event.image)} className="w-full h-full object-cover" alt={event.title} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent"></div>
                 <div className="absolute bottom-0 left-0 p-8 md:p-16 container mx-auto">
                     <h1 className="text-5xl md:text-7xl font-bold mb-4">

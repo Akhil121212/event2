@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, MapPin, Tag } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../utils/helper';
 
 const EventCard = ({ event }) => {
     return (
@@ -11,7 +12,7 @@ const EventCard = ({ event }) => {
         >
             <div className="h-48 overflow-hidden">
                 <img
-                    src={event.image || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80'}
+                    src={getImageUrl(event.image)}
                     alt={event.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />

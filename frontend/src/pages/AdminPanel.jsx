@@ -9,8 +9,10 @@ const AdminPanel = () => {
     const [registrations, setRegistrations] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({
-        title: '', date: '', description: '', category: 'Technical', venue: '', price: 0
+        title: '', date: '', description: '', category: 'Technical', venue: '', price: 0, image: ''
     });
+    const [imageFile, setImageFile] = useState(null);
+    const [editId, setEditId] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -31,6 +33,27 @@ const AdminPanel = () => {
 
 
 
+    const resetForm = () => {
+        setFormData({ title: '', date: '', description: '', category: 'Technical', venue: '', price: 0, image: '' });
+        setImageFile(null);
+        setEditId(null);
+    };
+
+    const handleEdit = (event) => {
+        setFormData({
+            title: event.title,
+            date: event.date.split('T')[0], // Format date for input
+            description: event.description,
+            category: event.category,
+            venue: event.venue,
+            price: event.price,
+            image: event.image
+        });
+        setEditId(event._id);
+        setShowForm(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -40,16 +63,40 @@ const AdminPanel = () => {
             return;
         }
 
+        const data = new FormData();
+        data.append('title', formData.title);
+        data.append('date', formData.date);
+        data.append('description', formData.description);
+        data.append('category', formData.category);
+        data.append('venue', formData.venue);
+        data.append('price', formData.price);
+        // If file is selected, append it. Otherwise send image URL string if needed (though backend prioritizes file)
+        if (imageFile) {
+            data.append('image', imageFile);
+        } else if (formData.image) {
+            data.append('image', formData.image);
+        }
+
         try {
-            await api.post('/admin', formData);
-            toast.success('Event Created!');
+            if (editId) {
+                await api.put(`/admin/${editId}`, data, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                toast.success('Event Updated!');
+            } else {
+                await api.post('/admin', data, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                toast.success('Event Created!');
+            }
             setShowForm(false);
+            resetForm();
             fetchData();
         } catch (err) {
-            const errorMsg = err.response?.data?.msg || err.response?.statusText || 'Failed to create event';
+            const errorMsg = err.response?.data?.msg || err.response?.statusText || 'Failed to save event';
             toast.error(errorMsg);
             if (err.response?.status === 403) {
-                toast.error('Only Admins can create events.');
+                toast.error('Only Admins can manage events.');
             }
         }
     };
@@ -79,12 +126,17 @@ const AdminPanel = () => {
         }
     }
 
+
+
     return (
         <div className="pt-24 px-6 container mx-auto min-h-screen">
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                 <button
-                    onClick={() => setShowForm(!showForm)}
+                    onClick={() => {
+                        resetForm();
+                        setShowForm(!showForm);
+                    }}
                     className="btn btn-primary flex items-center gap-2"
                 >
                     <Plus size={18} /> Create Event
@@ -102,13 +154,31 @@ const AdminPanel = () => {
                         <input className="input-field" type="date" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} />
                         <input className="input-field" placeholder="Venue" value={formData.venue} onChange={e => setFormData({ ...formData, venue: e.target.value })} />
                         <input className="input-field" type="number" placeholder="Price" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+
+                        <div className="col-span-2">
+                            <label className="block text-sm text-gray-400 mb-1">Event Image (File or URL)</label>
+                            <div className="flex gap-2">
+                                <input
+                                    type="file"
+                                    className="input-field flex-1 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-primary/80"
+                                    onChange={e => setImageFile(e.target.files[0])}
+                                    accept="image/*"
+                                />
+                                <input
+                                    className="input-field flex-1"
+                                    placeholder="Or paste Image URL"
+                                    value={formData.image}
+                                    onChange={e => setFormData({ ...formData, image: e.target.value })}
+                                />
+                            </div>
+                        </div>
                         <select className="input-field" value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                             <option value="Technical">Technical</option>
                             <option value="Cultural">Cultural</option>
                             <option value="Sports">Sports</option>
                         </select>
                         <textarea className="input-field col-span-2" placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}></textarea>
-                        <button className="btn btn-primary col-span-2">Create Event</button>
+                        <button className="btn btn-primary col-span-2">{editId ? 'Update Event' : 'Create Event'}</button>
                     </form>
                 </motion.div>
             )}
@@ -134,7 +204,7 @@ const AdminPanel = () => {
                                 <td className="p-4">{new Date(event.date).toLocaleDateString()}</td>
                                 <td className="p-4">{event.category}</td>
                                 <td className="p-4 flex gap-4">
-                                    <button className="text-blue-400 hover:text-blue-300"><Edit size={18} /></button>
+                                    <button onClick={() => handleEdit(event)} className="text-blue-400 hover:text-blue-300"><Edit size={18} /></button>
                                     <button onClick={() => handleDelete(event._id)} className="text-red-400 hover:text-red-300"><Trash2 size={18} /></button>
                                 </td>
                             </tr>

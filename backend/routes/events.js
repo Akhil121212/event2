@@ -43,6 +43,10 @@ router.get('/:id', async (req, res) => {
 router.post('/register/:id', auth, async (req, res) => {
     const { teamName, members, paymentReference } = req.body;
     try {
+        if (req.user.role === 'admin') {
+            return res.status(403).json({ msg: 'Admins cannot register for events' });
+        }
+
         const event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ msg: 'Event not found' });
 

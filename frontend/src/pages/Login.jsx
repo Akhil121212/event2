@@ -23,7 +23,10 @@ const Login = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center pt-20 px-4 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(0,243,255,0.1),transparent_50%)]"></div>
+            {/* Background Elements */}
+            <div className="absolute inset-0 -z-20 bg-grid opacity-20"></div>
+            <div className="absolute top-0 right-0 w-72 h-72 bg-primary/20 rounded-full blur-[100px] animate-float"></div>
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 rounded-full blur-[100px] animate-float-delayed"></div>
 
             <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}

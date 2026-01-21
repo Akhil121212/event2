@@ -7,9 +7,27 @@ const Home = () => {
     return (
         <div className="min-h-screen pt-20 overflow-hidden relative">
             {/* Background Elements */}
-            <div className="absolute top-0 left-0 w-full h-full -z-10 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-10"></div>
-            <div className="absolute top-20 right-20 w-72 h-72 bg-primary/20 rounded-full blur-[100px] animate-pulse"></div>
-            <div className="absolute bottom-20 left-20 w-96 h-96 bg-secondary/20 rounded-full blur-[100px] animate-pulse delay-1000"></div>
+            {/* Background Elements */}
+            <div className="absolute inset-0 -z-20 bg-grid opacity-20"></div>
+            <div className="absolute top-0 left-0 w-full h-full -z-10 bg-[url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
+
+            {/* Animated Blobs */}
+            <div className="absolute top-20 right-20 w-72 h-72 bg-primary/30 rounded-full blur-[100px] animate-float"></div>
+            <div className="absolute bottom-20 left-20 w-96 h-96 bg-secondary/30 rounded-full blur-[100px] animate-float-delayed"></div>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-glow -z-10"></div>
+
+            {/* Floating Icons Background */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none -z-5">
+                <div className="absolute top-1/4 left-1/4 animate-float text-primary/20 transform -rotate-12">
+                    <Calendar size={120} />
+                </div>
+                <div className="absolute bottom-1/3 right-1/4 animate-float-delayed text-secondary/20 transform rotate-12">
+                    <Trophy size={140} />
+                </div>
+                <div className="absolute top-1/3 right-10 animate-float text-white/10">
+                    <div className="text-9xl font-bold opacity-20">{'</>'}</div>
+                </div>
+            </div>
 
             {/* Hero Section */}
             <section className="container mx-auto px-6 py-20 flex flex-col items-center text-center">

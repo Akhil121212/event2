@@ -3,6 +3,8 @@ const router = express.Router();
 const Event = require('../models/Event');
 const Registration = require('../models/Registration');
 const auth = require('../middleware/auth');
+const upload = require('../middleware/upload');
+
 
 // Middleware to check if user is admin
 const adminAuth = (req, res, next) => {
@@ -14,8 +16,12 @@ const adminAuth = (req, res, next) => {
 };
 
 // Create Event (Admin Only)
-router.post('/', auth, adminAuth, async (req, res) => {
-    const { title, date, description, category, venue, image, price } = req.body;
+router.post('/', auth, adminAuth, upload.single('image'), async (req, res) => {
+    const { title, date, description, category, venue, price, image: imageBody } = req.body;
+
+    // Use uploaded file if present, otherwise use the URL from body (if any)
+    const image = req.file ? `/uploads/${req.file.filename}` : imageBody;
+
     try {
         const newEvent = new Event({ title, date, description, category, venue, image, price });
         const event = await newEvent.save();
@@ -27,12 +33,18 @@ router.post('/', auth, adminAuth, async (req, res) => {
 });
 
 // Update Event (Admin Only)
-router.put('/:id', auth, adminAuth, async (req, res) => {
+router.put('/:id', auth, adminAuth, upload.single('image'), async (req, res) => {
     try {
         let event = await Event.findById(req.params.id);
         if (!event) return res.status(404).json({ msg: 'Event not found' });
 
-        const { title, date, description, category, venue, image, price } = req.body;
+        const { title, date, description, category, venue, price, image: imageBody } = req.body;
+
+        let image = imageBody;
+        if (req.file) {
+            image = `/uploads/${req.file.filename}`;
+        }
+
         if (title) event.title = title;
         if (date) event.date = date;
         if (description) event.description = description;
