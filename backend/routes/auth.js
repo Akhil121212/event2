@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const sendEmail = require('../utils/sendEmail');
+
 // Register
 router.post('/register', async (req, res) => {
     const { name, email, password, role } = req.body;
@@ -19,6 +21,14 @@ router.post('/register', async (req, res) => {
 
         user = new User({ name, email, password: hashedPassword, role });
         await user.save();
+
+        // Send Welcome Email
+        const subject = 'Welcome to EventGO!';
+        const text = `Hi ${name},\n\nWelcome to EventGO! We are excited to have you on board.\n\nBest Regards,\nEventGO Team`;
+        const html = `<h1>Welcome to EventGO, ${name}!</h1><p>We are excited to have you on board.</p><p>Best Regards,<br>EventGO Team</p>`;
+
+        // Don't await email to prevent blocking response
+        sendEmail(email, subject, text, html);
 
         const payload = { user: { id: user.id, role: user.role } };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
