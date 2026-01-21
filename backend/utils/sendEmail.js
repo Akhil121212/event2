@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 
 const sendEmail = async (to, subject, text, html) => {
+    console.log(`[Email] Attempting to send email to: ${to}`);
     try {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -22,9 +23,13 @@ const sendEmail = async (to, subject, text, html) => {
         };
 
         const info = await transporter.sendMail(mailOptions);
-        console.log('Email sent: ' + info.response);
+        console.log(`[Email] Success! Message ID: ${info.messageId}`);
+        console.log(`[Email] Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+        return true;
     } catch (error) {
-        console.error('Error sending email:', error);
+        console.error('[Email] Failed to send email.');
+        console.error(error);
+        return false;
     }
 };
 

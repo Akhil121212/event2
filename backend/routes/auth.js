@@ -67,13 +67,20 @@ router.post('/register', async (req, res) => {
         </div>
         `;
 
-        // Don't await email to prevent blocking response
-        sendEmail(email, subject, text, html);
+        // Send Welcome Email
+        // Await this to ensure we can report status to frontend
+        const emailSent = await sendEmail(email, subject, text, html);
 
         const payload = { user: { id: user.id, role: user.role } };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) throw err;
-            res.json({ token, role: user.role });
+            // Include email status in response
+            res.json({
+                token,
+                role: user.role,
+                msg: 'Registration Successful!',
+                emailSent: emailSent
+            });
         });
     } catch (err) {
         res.status(500).send('Server Error');
