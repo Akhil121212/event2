@@ -67,19 +67,18 @@ router.post('/register', async (req, res) => {
         </div>
         `;
 
-        // Send Welcome Email
-        // Await this to ensure we can report status to frontend
-        const emailSent = await sendEmail(email, subject, text, html);
+        // Send Welcome Email (Non-blocking)
+        // We do NOT await this anymore so registration is always fast and successful
+        sendEmail(email, subject, text, html).catch(err => console.error("Email send failed (background):", err));
 
         const payload = { user: { id: user.id, role: user.role } };
         jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
             if (err) throw err;
-            // Include email status in response
+            // Return success immediately, don't wait for email
             res.json({
                 token,
                 role: user.role,
-                msg: 'Registration Successful!',
-                emailSent: emailSent
+                msg: 'Registration Successful!'
             });
         });
     } catch (err) {

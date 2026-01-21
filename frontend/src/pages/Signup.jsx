@@ -14,13 +14,7 @@ const Signup = () => {
             const res = await api.post('/auth/register', formData);
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('role', res.data.role);
-
-            if (res.data.emailSent) {
-                toast.success('Registration Successful! Welcome Email Sent 📧');
-            } else {
-                toast.success('Registration Successful!');
-            }
-
+            toast.success('Registration Successful!');
             navigate('/dashboard');
         } catch (err) {
             toast.error(err.response?.data?.msg || 'Registration Failed');
