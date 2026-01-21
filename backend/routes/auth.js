@@ -23,9 +23,49 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         // Send Welcome Email
-        const subject = 'Welcome to EventGO!';
-        const text = `Hi ${name},\n\nWelcome to EventGO! We are excited to have you on board.\n\nBest Regards,\nEventGO Team`;
-        const html = `<h1>Welcome to EventGO, ${name}!</h1><p>We are excited to have you on board.</p><p>Best Regards,<br>EventGO Team</p>`;
+        // Send Welcome Email
+        const subject = 'Welcome to EventGO! 🚀';
+        const text = `Hi ${name},\n\nWelcome to EventGO! We are thrilled to have you join our community.\n\nStart exploring events now: https://aeventgo.vercel.app/dashboard\n\nBest Regards,\nThe EventGO Team`;
+
+        const html = `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px; border-radius: 10px;">
+            <div style="background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                
+                <!-- Logo / Header -->
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #2563eb; margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -1px;">EventGO</h1>
+                    <p style="color: #6b7280; margin-top: 5px; font-size: 14px;">Your Gateway to Amazing Events</p>
+                </div>
+
+                <!-- Main Content -->
+                <div style="color: #374151; font-size: 16px; line-height: 1.6;">
+                    <p style="margin-bottom: 20px;">Hi <strong>${name}</strong>,</p>
+                    <p style="margin-bottom: 20px;">Welcome to the EventGO family! 🎉 We're absolutely thrilled to have you on board.</p>
+                    <p style="margin-bottom: 20px;">You are now part of a community that loves to explore, register, and participate in the most exciting events happening around you.</p>
+                    
+                    <ul style="margin-bottom: 30px; padding-left: 20px; color: #4b5563;">
+                        <li style="margin-bottom: 10px;">🔍 <strong>Discover</strong> exclusive events</li>
+                        <li style="margin-bottom: 10px;">🎟️ <strong>Register</strong> seamlessly with your team</li>
+                        <li style="margin-bottom: 10px;">✨ <strong>Experience</strong> memorable moments</li>
+                    </ul>
+
+                    <!-- Call to Action Button -->
+                    <div style="text-align: center; margin-bottom: 40px;">
+                        <a href="https://aeventgo.vercel.app/dashboard" style="background-color: #2563eb; color: #ffffff; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);"> Go to Dashboard </a>
+                    </div>
+
+                    <p style="margin-bottom: 0;">Ready to get started?</p>
+                    <p style="margin-top: 5px;"><strong>The EventGO Team</strong></p>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div style="text-align: center; margin-top: 20px; color: #9ca3af; font-size: 12px;">
+                <p>&copy; ${new Date().getFullYear()} EventGO. All rights reserved.</p>
+                <p>Need help? Reply to this email.</p>
+            </div>
+        </div>
+        `;
 
         // Don't await email to prevent blocking response
         sendEmail(email, subject, text, html);
