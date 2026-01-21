@@ -131,7 +131,7 @@ const RegisterEvent = () => {
                         <div>
                             <label className="block text-gray-400 mb-4">Team Members</label>
                             {members.map((member, index) => (
-                                <div key={index} className="flex gap-4 mb-4">
+                                <div key={index} className="flex flex-col md:flex-row gap-4 mb-4 bg-white/5 p-4 rounded-xl md:bg-transparent md:p-0">
                                     <div className="flex-1 relative">
                                         <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input

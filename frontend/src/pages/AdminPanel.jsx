@@ -130,14 +130,14 @@ const AdminPanel = () => {
 
     return (
         <div className="pt-24 px-6 container mx-auto min-h-screen">
-            <div className="flex justify-between items-center mb-8">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                 <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                 <button
                     onClick={() => {
                         resetForm();
                         setShowForm(!showForm);
                     }}
-                    className="btn btn-primary flex items-center gap-2"
+                    className="btn btn-primary flex items-center gap-2 w-full md:w-auto justify-center"
                 >
                     <Plus size={18} /> Create Event
                 </button>
@@ -155,9 +155,9 @@ const AdminPanel = () => {
                         <input className="input-field" placeholder="Venue" value={formData.venue} onChange={e => setFormData({ ...formData, venue: e.target.value })} />
                         <input className="input-field" type="number" placeholder="Price" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
 
-                        <div className="col-span-2">
+                        <div className="col-span-1 md:col-span-2">
                             <label className="block text-sm text-gray-400 mb-1">Event Image (File or URL)</label>
-                            <div className="flex gap-2">
+                            <div className="flex flex-col md:flex-row gap-2">
                                 <input
                                     type="file"
                                     className="input-field flex-1 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-black hover:file:bg-primary/80"
@@ -177,8 +177,8 @@ const AdminPanel = () => {
                             <option value="Cultural">Cultural</option>
                             <option value="Sports">Sports</option>
                         </select>
-                        <textarea className="input-field col-span-2" placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}></textarea>
-                        <button className="btn btn-primary col-span-2">{editId ? 'Update Event' : 'Create Event'}</button>
+                        <textarea className="input-field col-span-1 md:col-span-2" placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })}></textarea>
+                        <button className="btn btn-primary col-span-1 md:col-span-2">{editId ? 'Update Event' : 'Create Event'}</button>
                     </form>
                 </motion.div>
             )}
@@ -188,29 +188,32 @@ const AdminPanel = () => {
                     <h2 className="text-xl font-bold">Manage Events</h2>
                     <span className="text-sm text-gray-400">Total: {events.length}</span>
                 </div>
-                <table className="w-full text-left">
-                    <thead className="bg-white/5 uppercase text-sm text-gray-400">
-                        <tr>
-                            <th className="p-4">Title</th>
-                            <th className="p-4">Date</th>
-                            <th className="p-4">Category</th>
-                            <th className="p-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {events.map((event) => (
-                            <tr key={event._id} className="border-t border-white/5 hover:bg-white/5 transition-colors">
-                                <td className="p-4">{event.title}</td>
-                                <td className="p-4">{new Date(event.date).toLocaleDateString()}</td>
-                                <td className="p-4">{event.category}</td>
-                                <td className="p-4 flex gap-4">
-                                    <button onClick={() => handleEdit(event)} className="text-blue-400 hover:text-blue-300"><Edit size={18} /></button>
-                                    <button onClick={() => handleDelete(event._id)} className="text-red-400 hover:text-red-300"><Trash2 size={18} /></button>
-                                </td>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left min-w-[600px]">
+                        <thead className="bg-white/5 uppercase text-sm text-gray-400">
+                            <tr>
+                                <th className="p-4">Title</th>
+                                <th className="p-4">Date</th>
+                                <th className="p-4">Category</th>
+                                <th className="p-4">Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {events.map((event) => (
+                                <tr key={event._id} className="border-t border-white/5 hover:bg-white/5 transition-colors">
+                                    <td className="p-4">{event.title}</td>
+                                    <td className="p-4">{new Date(event.date).toLocaleDateString()}</td>
+                                    <td className="p-4">{event.category}</td>
+                                    <td className="p-4 flex gap-4">
+                                        <button onClick={() => handleEdit(event)} className="text-blue-400 hover:text-blue-300"><Edit size={18} /></button>
+                                        <button onClick={() => handleDelete(event._id)} className="text-red-400 hover:text-red-300"><Trash2 size={18} /></button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
 
             {/* Registrations Section */}
@@ -290,7 +293,7 @@ const AdminPanel = () => {
                     border-color: var(--primary);
                 }
             `}</style>
-        </div>
+        </div >
     );
 };
 
